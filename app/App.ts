@@ -1,5 +1,6 @@
 import express from "express";
 import { AppDataSource } from "./data-source";
+import * as routes from "./routes";
 
 class App {
   public server: express.Application;
@@ -27,9 +28,8 @@ class App {
   }
 
   private router() {
-    this.server.get('/healthy-check', (res, req) => {
-      req.sendStatus(200);
-    })
+    this.server.get('/healthy-check', (res, req) => req.sendStatus(200));
+    this.server.use('/company', routes.company);
   }
 }
 
