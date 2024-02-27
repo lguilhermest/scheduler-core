@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { UnauthorizedException, UnprocessableContentException } from "../../exceptions";
-import CompanyService from "../../services/company/CompanyService";
-import jwt from "jsonwebtoken";
+import { AuthService } from "app/services/company";
+import { UnprocessableContentException } from "app/exceptions";
 
 class AuthController {
   static async login(req: Request, res: Response) {
@@ -12,23 +11,9 @@ class AuthController {
       throw new UnprocessableContentException(result);
     }
 
-    const company = await CompanyService.findByEmail(req.body.email);
+    const data = await AuthService.authenticate(req.body.email, req.body.password)
 
-    if (!company) {
-      throw new UnauthorizedException('credenciais inválidas');
-    }
-
-    const match = await company.validatePassword(req.body.password);
-
-    if (!match) {
-      throw new UnauthorizedException('credenciais inválidas');
-    }
-
-    const access_token = jwt.sign(company.publicProfile(), process.env.JWT_SECRET as string, { expiresIn: '1h' });
-
-    res.status(201).send({
-      access_token
-    })
+    res.status(201).send(data);
   }
 }
 

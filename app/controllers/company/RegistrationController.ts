@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import RegistrationService from "../../services/company/RegistrationService";
+import { RegistrationService } from "app/services/company";
 
 class RegistrationController {
   static async saveCompany(req: Request, res: Response) {

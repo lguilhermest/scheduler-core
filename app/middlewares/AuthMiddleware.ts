@@ -3,7 +3,7 @@ import {
   Response,
   NextFunction
 } from "express";
-import { UnauthorizedException } from "../exceptions";
+import { UnauthorizedException } from "app/exceptions";
 import jwt from "jsonwebtoken";
 
 export default class AuthMiddleware {

@@ -24,6 +24,11 @@ class Authenticable {
     return data;
   }
 
+  async setPassword(password: string): Promise<void> {
+    this.password = password;
+    await this.hashPassword();
+  }
+
   async hashPassword(): Promise<void> {
     this.password = await bcrypt.hash(this.password, 10);
   }

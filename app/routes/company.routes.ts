@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { Exception } from "../exceptions";
-import RegistrationSchema from "../schemas/company/RegistrationSchema";
-import RegistrationController from "../controllers/company/RegistrationController";
-import AuthSchema from "../schemas/company/AuthSchema";
-import AuthController from "../controllers/company/AuthController";
-import { AuthMiddleware } from "../middlewares";
+import {
+  AccountController,
+  AuthController,
+  RegistrationController
+} from "app/controllers/company";
+import { AuthMiddleware } from "app/middlewares";
+import { Exception } from "app/exceptions";
+import AuthSchema from "app/schemas/company/AuthSchema";
+import RegistrationSchema from "app/schemas/company/RegistrationSchema";
+import UpdatePasswordSchema from "app/schemas/company/UpdatePasswordSchema";
 
 const router = Router();
 
@@ -12,5 +16,7 @@ router.post('/registration', RegistrationSchema, Exception.asyncHandler(Registra
 router.post('/login', AuthSchema, Exception.asyncHandler(AuthController.login));
 
 router.use(AuthMiddleware.user);
+router.get('/', AccountController.account);
+router.post('/update_password', UpdatePasswordSchema, Exception.asyncHandler(AccountController.updatePassword))
 
 export default router;
