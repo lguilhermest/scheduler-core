@@ -2,12 +2,13 @@ import { Company } from "app/entity";
 import { AppDataSource } from "app/data-source";
 import { UnauthorizedException } from "app/exceptions";
 import jwt from "jsonwebtoken";
+import AccountService from "./AccountService";
 
 class AuthService {
   static repository = AppDataSource.getRepository(Company);
 
   static async authenticate(email: string, password: string) {
-    const company = await this.repository.findOneBy({ email })
+    const company = await AccountService.company(email);
 
     if (!company) {
       throw new UnauthorizedException('credenciais inválidas');
@@ -21,7 +22,7 @@ class AuthService {
 
     return {
       access_token: jwt.sign(company.publicProfile(), process.env.JWT_SECRET as string, { expiresIn: '1h' }),
-      company: company.publicProfile()
+      account: company.publicProfile()
     };
   }
 }

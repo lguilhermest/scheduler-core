@@ -5,7 +5,7 @@ import { AccountService } from "app/services/company";
 
 class CompanyController {
   static async account(req: Request, res: Response) {
-    const user = await AccountService.company(res.locals.email);
+    const user = await AccountService.account(res.locals.email);
 
     res.send(user);
   }

@@ -6,11 +6,19 @@ class AccountService {
   static repository = AppDataSource.getRepository(Company);
 
   static async company(email: string) {
-    const user = await this.repository.findOne({
-      where: { email }
+    const company = await this.repository.findOne({
+      where: { email },
+      relations: [
+        'addresses'
+      ]
     });
 
-    return user?.publicProfile();
+    return company;
+  }
+
+  static async account(email: string) {
+    const company = await this.company(email) as Company;
+    return company?.publicProfile();
   }
 
   static async updatePassword(id: number, password: string, newPassword: string) {

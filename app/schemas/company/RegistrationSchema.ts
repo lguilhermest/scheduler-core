@@ -1,6 +1,7 @@
 import { body } from "express-validator";
 import { AppDataSource } from "../../data-source";
 import { Company } from "../../entity";
+import AddressSchema from "../AddressSchema";
 
 export default [
   body('name').isString(),
@@ -13,4 +14,5 @@ export default [
   }),
   body('phone').isMobilePhone('pt-BR'),
   body('password').isString().isLength({ min: 6 }),
+  ...AddressSchema
 ]
