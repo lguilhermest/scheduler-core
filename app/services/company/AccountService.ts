@@ -9,7 +9,8 @@ class AccountService {
     const company = await this.repository.findOne({
       where: { email },
       relations: [
-        'addresses'
+        'addresses',
+        'services'
       ]
     });
 

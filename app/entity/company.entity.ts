@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import Authenticable from "./authenticable.entity";
 import Address from "./address.entity";
+import Service from "./service.entity";
 
 @Entity('companies')
 class Company extends Authenticable {
@@ -25,6 +26,9 @@ class Company extends Authenticable {
 
   @OneToMany(() => Address, address => address.company)
   addresses!: Address[];
+
+  @OneToMany(() => Service, service => service.company)
+  services?: Service[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
