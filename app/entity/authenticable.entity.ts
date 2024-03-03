@@ -7,7 +7,7 @@ enum AccountStatus {
   'PENDING' = 'PENDING',
 }
 
-class Authenticable {
+abstract class Authenticable {
   @Column()
   password!: string;
 

@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from "express";
+import { validationResult } from "express-validator";
+import UnprocessableContentException from "./UnprocessableContentException";
 
 class Exception {
   public static handler(err: Error | any, req: Request, res: Response, next: NextFunction) {
@@ -8,9 +10,17 @@ class Exception {
 
   public static asyncHandler(fn: (req: Request, res: Response, next: NextFunction) => any) {
     return function (req: Request, res: Response, next: NextFunction) {
-      Promise.resolve(fn(req, res, next)).catch((error) => {
-        next(error);
-      })
+      const result = validationResult(req);
+
+      if (!result.isEmpty()) {
+        throw new UnprocessableContentException(result);
+      }
+
+      Promise
+        .resolve(fn(req, res, next))
+        .catch((error) => {
+          next(error);
+        });
     }
   }
 }
