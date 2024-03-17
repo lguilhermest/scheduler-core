@@ -4,6 +4,6 @@ export interface CreateServiceDTO {
   name: string;
   description?: string;
   duration_minutes: number;
-  price: Number;
+  price: number;
   status?: ServiceStatus;
 }
