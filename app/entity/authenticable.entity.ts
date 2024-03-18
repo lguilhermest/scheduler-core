@@ -8,7 +8,7 @@ enum AccountStatus {
 }
 
 abstract class Authenticable {
-  @Column()
+  @Column({ select: false })
   password!: string;
 
   @Column({
@@ -17,12 +17,6 @@ abstract class Authenticable {
     default: AccountStatus.ACTIVE
   })
   status!: AccountStatus;
-
-  // Methods
-  publicProfile(): Partial<Authenticable> {
-    const { password, ...data } = this;
-    return data;
-  }
 
   async setPassword(password: string): Promise<void> {
     this.password = password;

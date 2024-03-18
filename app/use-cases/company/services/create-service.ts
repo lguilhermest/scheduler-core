@@ -11,7 +11,7 @@ class CreateService {
     
     const service = this.repository.create({
       status: ServiceStatus.ACTIVE,
-      company: company.publicProfile(),
+      company,
       ...data
     });
 

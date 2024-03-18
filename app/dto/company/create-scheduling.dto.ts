@@ -1,5 +1,5 @@
 export interface CreateSchedulingDTO {
-  date: Date;
+  date: string;
   start: string;
   service_id: number;
 }

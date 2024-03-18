@@ -1,36 +1,58 @@
-import { AppDataSource } from "app/data-source";
-import { Company, Scheduling } from "app/entity";
+import { Scheduling } from "app/entity";
 import { FindService } from "../services";
 import { CreateSchedulingDTO } from "app/dto";
 import { GetCompany } from "../account";
+import { Exception } from "app/exceptions";
+import { DataSource, Repository } from "typeorm";
+import { CheckAvailability } from "./check-availability";
 
 export class CreateScheduling {
-  private static repository = AppDataSource.getRepository(Scheduling);
+  private repository: Repository<Scheduling>;
+  private checkAvailability: CheckAvailability;
 
-  public static async handle(companyId: number, data: CreateSchedulingDTO) {
+  constructor(dataSource: DataSource) {
+    this.repository = dataSource.getRepository(Scheduling);
+    this.checkAvailability = new CheckAvailability(dataSource);
+  }
+
+  public async handle(companyId: number, data: CreateSchedulingDTO) {
+    const scheduling = new Scheduling();
+
     const company = await GetCompany.handle(companyId);
     const service = await FindService.handle(companyId, data.service_id);
 
-    const scheduling = new Scheduling();
-
     const [hour, minute] = data.start.split(":").map(Number);
 
-    const startTime = new Date(data.date);
-    startTime.setHours(hour, minute);
+    const start = new Date();
+    start.setHours(hour, minute, 0);
 
-    const endTime = new Date(data.date);
-    endTime.setHours(hour, minute + service.duration_minutes);
+    const end = new Date()
+    end.setHours(hour, minute + service.duration_minutes, 0);
+
+    const isTimeAvailable = await this.checkAvailability.handle(company.id, {
+      date: data.date,
+      start: this.getTime(start),
+      end: this.getTime(end),
+      serviceId: data.service_id
+    })
+
+    if (!isTimeAvailable) {
+      throw new Exception(409, 'horário não disponível');
+    }
 
     scheduling.amount = service.price;
     scheduling.date = new Date(data.date);
-    scheduling.start = startTime;
-    scheduling.end = endTime;
+    scheduling.start = start;
+    scheduling.end = end;
     scheduling.service = service;
-
-    scheduling.company = company.publicProfile() as Company;
+    scheduling.company = company;
 
     await this.repository.save(scheduling);
 
-    return scheduling
+    return scheduling;
+  }
+
+  private getTime(date: Date) {
+    return ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
   }
 }

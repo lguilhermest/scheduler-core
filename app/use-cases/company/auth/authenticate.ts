@@ -1,14 +1,13 @@
-import { Company } from "app/entity";
-import { AppDataSource } from "app/data-source";
 import { UnauthorizedException } from "app/exceptions";
+import { AppDataSource } from "app/data-source";
+import { Company } from "app/entity";
 import jwt from "jsonwebtoken";
-import AccountService from "./AccountService";
 
-class AuthService {
-  static repository = AppDataSource.getRepository(Company);
+export class Authenticate {
+  private static repository = AppDataSource.getRepository(Company);
 
-  static async authenticate(email: string, password: string) {
-    const company = await AccountService.getAuthValues(email);
+  public static async handle(email: string, password: string) {
+    const company = await this.findCompany(email);
 
     if (!company) {
       throw new UnauthorizedException('credenciais inválidas');
@@ -26,6 +25,11 @@ class AuthService {
       access_token: jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: '1h' }),
     };
   }
-}
 
-export default AuthService;
+  private static async findCompany(email: string) {
+    return await this.repository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password']
+    });
+  }
+}

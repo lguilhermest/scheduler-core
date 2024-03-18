@@ -18,7 +18,7 @@ class GetAccount {
       throw new NotFoundException('conta não encontrada');
     }
 
-    return company.publicProfile();
+    return company;
   }
 }
 

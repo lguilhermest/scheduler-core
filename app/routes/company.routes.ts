@@ -23,14 +23,17 @@ router.use(AuthMiddleware.user);
 router.get('/', AccountController.account);
 router.post('/update_password', UpdatePasswordSchema, Exception.asyncHandler(AccountController.updatePassword));
 
-router
-  .get('/services', Exception.asyncHandler(ServiceController.list))
-  .post('/services', ServiceSchema.create, Exception.asyncHandler(ServiceController.create))
-  .delete('/services/:id', Exception.asyncHandler(ServiceController.delete));
+router.route('services')
+  .get(Exception.asyncHandler(ServiceController.list))
+  .post(ServiceSchema.create, Exception.asyncHandler(ServiceController.create))
 
-router.get('/schedulings', Exception.asyncHandler(SchedulingController.list))
-router.post('/schedulings', schedulingSchema.create, Exception.asyncHandler(SchedulingController.create))
-router.put('/schedulings', Exception.asyncHandler(SchedulingController.update))
+router.delete('/services/:id', Exception.asyncHandler(ServiceController.delete));
+
+router.route('/schedulings')
+  .get(Exception.asyncHandler(SchedulingController.list))
+  .post(schedulingSchema.create, Exception.asyncHandler(SchedulingController.create))
+  .put(Exception.asyncHandler(SchedulingController.update))
+
 router.delete('/schedulings', Exception.asyncHandler(SchedulingController.delete))
 
 export default router;
