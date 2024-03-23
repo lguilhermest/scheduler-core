@@ -1,1 +1,1 @@
-export * from "./company/create-service.dto";
+export * from "./company";

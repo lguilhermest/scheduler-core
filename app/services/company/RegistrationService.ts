@@ -22,7 +22,7 @@ class RegistrationService {
     delete companyAddress.company;
 
     return {
-      ...company.publicProfile(),
+      ...company,
       address: companyAddress
     };
   }

@@ -5,6 +5,8 @@ import UnprocessableContentException from "./UnprocessableContentException";
 class Exception {
   public static handler(err: Error | any, req: Request, res: Response, next: NextFunction) {
     const { status = 500, ...rest } = err;
+    console.log(err);
+
     res.status(status).send(rest);
   }
 

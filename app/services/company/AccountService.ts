@@ -1,11 +1,11 @@
 import { Company } from "app/entity";
 import { AppDataSource } from "app/data-source";
-import { UnauthorizedException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 
 class AccountService {
   static repository = AppDataSource.getRepository(Company);
 
-  static async company(email: string) {
+  static async account(email: string) {
     const company = await this.repository.findOne({
       where: { email },
       relations: [
@@ -17,23 +17,27 @@ class AccountService {
     return company;
   }
 
-  static async account(email: string) {
-    const company = await this.company(email) as Company;
-    return company?.publicProfile();
-  }
-
   static async updatePassword(id: number, password: string, newPassword: string) {
     const company = await this.repository.findOneBy({ id }) as Company;
 
     const match = await company.validatePassword(password);
 
     if (!match) {
-      throw new UnauthorizedException('senha incorreta');
+      throw new HttpException(401, 'credenciais inválidas');
     }
 
     await company.setPassword(newPassword);
 
     await this.repository.save(company);
+  }
+
+  static async getAuthValues(email: string) {
+    const company = await this.repository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password']
+    });
+
+    return company;
   }
 }
 

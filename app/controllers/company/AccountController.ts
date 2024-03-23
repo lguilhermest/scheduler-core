@@ -9,7 +9,7 @@ class CompanyController {
   }
 
   static async updatePassword(req: Request, res: Response) {
-    await AccountService.updatePassword(res.locals.id, req.body.password, req.body.new_password);
+    await AccountService.updatePassword(res.locals.user.id, req.body.password, req.body.new_password);
 
     res.status(200).send({
       message: 'senha alterada com sucesso'

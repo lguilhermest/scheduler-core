@@ -3,7 +3,7 @@ import {
   Response,
   NextFunction
 } from "express";
-import { UnauthorizedException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 import jwt from "jsonwebtoken";
 
 export default class AuthMiddleware {
@@ -11,7 +11,7 @@ export default class AuthMiddleware {
     const token = AuthMiddleware.extractTokenFromHeader(req);
 
     if (typeof token !== 'string') {
-      throw new UnauthorizedException();
+      throw new HttpException(401, "unauthenticated");
     }
 
     try {
@@ -23,10 +23,10 @@ export default class AuthMiddleware {
 
       res.locals.user = payload;
       res.locals.token = token;
-      
+
       next();
     } catch (error) {
-      throw new UnauthorizedException("unauthenticated");
+      throw new HttpException(401, "unauthenticated");
     }
   }
 
