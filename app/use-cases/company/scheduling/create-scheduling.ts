@@ -2,7 +2,7 @@ import { Scheduling } from "app/entity";
 import { FindService } from "../services";
 import { CreateSchedulingDTO } from "app/dto";
 import { GetCompany } from "../account";
-import { Exception } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 import { DataSource, Repository } from "typeorm";
 import { CheckAvailability } from "./check-availability";
 
@@ -37,7 +37,7 @@ export class CreateScheduling {
     })
 
     if (!isTimeAvailable) {
-      throw new Exception(409, 'horário não disponível');
+      throw new HttpException(409, 'horário não disponível');
     }
 
     scheduling.amount = service.price;

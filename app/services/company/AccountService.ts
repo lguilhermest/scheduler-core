@@ -1,6 +1,6 @@
 import { Company } from "app/entity";
 import { AppDataSource } from "app/data-source";
-import { UnauthorizedException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 
 class AccountService {
   static repository = AppDataSource.getRepository(Company);
@@ -23,7 +23,7 @@ class AccountService {
     const match = await company.validatePassword(password);
 
     if (!match) {
-      throw new UnauthorizedException('senha incorreta');
+      throw new HttpException(401, 'credenciais inválidas');
     }
 
     await company.setPassword(newPassword);

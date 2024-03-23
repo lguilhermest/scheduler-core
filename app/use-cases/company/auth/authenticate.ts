@@ -1,4 +1,4 @@
-import { UnauthorizedException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 import { AppDataSource } from "app/data-source";
 import { Company } from "app/entity";
 import jwt from "jsonwebtoken";
@@ -10,13 +10,13 @@ export class Authenticate {
     const company = await this.findCompany(email);
 
     if (!company) {
-      throw new UnauthorizedException('credenciais inválidas');
+      throw new HttpException(401, 'credenciais inválidas');
     }
 
     const match = await company.validatePassword(password);
 
     if (!match) {
-      throw new UnauthorizedException('credenciais inválidas');
+      throw new HttpException(401, 'credenciais inválidas');
     }
 
     const payload = { ...company };

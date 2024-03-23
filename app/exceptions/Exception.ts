@@ -3,14 +3,6 @@ import { validationResult } from "express-validator";
 import UnprocessableContentException from "./UnprocessableContentException";
 
 class Exception {
-  declare status: number;
-  declare message: string;
-
-  constructor(status: number, message?: string) {
-    this.message = message || 'http exception';
-    this.status = status;
-  }
-
   public static handler(err: Error | any, req: Request, res: Response, next: NextFunction) {
     const { status = 500, ...rest } = err;
     console.log(err);

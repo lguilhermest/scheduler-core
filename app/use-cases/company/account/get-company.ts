@@ -1,6 +1,6 @@
 import { AppDataSource } from "app/data-source";
 import { Company } from "app/entity";
-import { NotFoundException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 
 class GetCompany {
   private static repository = AppDataSource.getRepository(Company);
@@ -9,7 +9,7 @@ class GetCompany {
     const company = await this.repository.findOneBy({ id });
 
     if (!company) {
-      throw new NotFoundException('conta não encontrada');
+      throw new HttpException(404, 'conta não encontrada');
     }
 
     return company;

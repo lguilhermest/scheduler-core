@@ -9,7 +9,7 @@ import {
 import Authenticable from "./authenticable.entity";
 import Address from "./address.entity";
 import Service from "./service.entity";
-import Scheduling from "./scheduling.entity";
+import { Scheduling } from "./scheduling.entity";
 
 @Entity('companies')
 class Company extends Authenticable {

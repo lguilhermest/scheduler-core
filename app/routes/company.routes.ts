@@ -34,6 +34,6 @@ router.route('/schedulings')
   .post(schedulingSchema.create, Exception.asyncHandler(SchedulingController.create))
   .put(Exception.asyncHandler(SchedulingController.update))
 
-router.delete('/schedulings', Exception.asyncHandler(SchedulingController.delete))
+router.delete('/schedulings/:id', Exception.asyncHandler(SchedulingController.delete))
 
 export default router;

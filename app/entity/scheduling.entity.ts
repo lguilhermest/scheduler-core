@@ -10,14 +10,14 @@ import {
 import Company from "./company.entity";
 import Service from "./service.entity";
 
-enum SchedulingStatus {
+export enum SchedulingStatus {
   PENDING = 'PENDING',
   CANCELLED = 'CANCELLED',
   COMPLETE = 'COMPLETE'
 }
 
 @Entity('schedulings')
-class Scheduling {
+export class Scheduling {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -53,5 +53,3 @@ class Scheduling {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 }
-
-export default Scheduling;

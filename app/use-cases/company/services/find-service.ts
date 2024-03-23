@@ -1,6 +1,6 @@
 import { AppDataSource } from "app/data-source";
 import { Service } from "app/entity";
-import { NotFoundException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 
 class FindService {
   private static repository = AppDataSource.getRepository(Service);
@@ -14,7 +14,7 @@ class FindService {
     });
 
     if(!service){
-      throw new NotFoundException("serviço não encontrado");
+      throw new HttpException(404, "serviço não encontrado");
     }
 
     return service;

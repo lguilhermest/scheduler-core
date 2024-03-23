@@ -1,6 +1,6 @@
 import { AppDataSource } from "app/data-source";
 import { Company } from "app/entity";
-import { NotFoundException } from "app/exceptions";
+import { HttpException } from "app/exceptions";
 
 class GetAccount {
   private static repository = AppDataSource.getRepository(Company);
@@ -15,7 +15,7 @@ class GetAccount {
     });
 
     if (!company) {
-      throw new NotFoundException('conta não encontrada');
+      throw new HttpException(404, 'conta não encontrada');
     }
 
     return company;
