@@ -9,7 +9,7 @@ export class DeleteScheduling {
     this.repository = dataSource.getRepository(Scheduling);
   }
 
-  public async handle(companyId: number, id: number) {
+  public async handle(companyId: number, id: string) {
     const scheduling = await this.repository.findOne({
       where: {
         id

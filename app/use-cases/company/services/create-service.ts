@@ -1,13 +1,19 @@
-import { AppDataSource } from "app/data-source";
+import { DataSource, Repository } from "typeorm";
 import { CreateServiceDTO } from "app/dto";
-import Service, { ServiceStatus } from "app/entity/service.entity";
-import GetCompany from "../account/get-company";
+import { AppDataSource } from "app/data-source";
+import { GetAccount } from "../account";
+import { Service, ServiceStatus } from "app/entity";
 
-class CreateService {
-  private static repository = AppDataSource.getRepository(Service);
+export class CreateService {
+  private repository: Repository<Service>;
 
-  static async handle(companyId: number, data: CreateServiceDTO): Promise<Service> {
-    const company = await GetCompany.handle(companyId);
+  constructor(dataSource: DataSource){
+    this.repository = dataSource.getRepository(Service);
+  }
+
+  public async handle(companyId: number, data: CreateServiceDTO): Promise<Service> {
+    const useCase = new GetAccount(AppDataSource);
+    const company = await useCase.handle(companyId);
     
     const service = this.repository.create({
       status: ServiceStatus.ACTIVE,
@@ -20,5 +26,3 @@ class CreateService {
     return service;
   }
 }
-
-export default CreateService;

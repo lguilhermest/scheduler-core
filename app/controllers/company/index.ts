@@ -1,5 +1,5 @@
-export { default as AccountController } from "./AccountController";
+export * from "./account.controller";
 export * from "./auth.controller";
-export { default as RegistrationController } from "./RegistrationController";
+export * from "./registration.controller";
 export * from "./scheduling.controller";
 export { default as ServiceController } from "./service.controller";

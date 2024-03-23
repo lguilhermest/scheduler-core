@@ -1,2 +1,2 @@
-export { default as GetAccount } from "./get-account";
-export { default as GetCompany } from "./get-company";
+export * from "./get-account";
+export * from "./update-password";

@@ -1,10 +1,11 @@
 import { Scheduling } from "app/entity";
 import { FindService } from "../services";
 import { CreateSchedulingDTO } from "app/dto";
-import { GetCompany } from "../account";
+import { GetAccount } from "../account";
 import { HttpException } from "app/exceptions";
 import { DataSource, Repository } from "typeorm";
 import { CheckAvailability } from "./check-availability";
+import { AppDataSource } from "app/data-source";
 
 export class CreateScheduling {
   private repository: Repository<Scheduling>;
@@ -18,8 +19,13 @@ export class CreateScheduling {
   public async handle(companyId: number, data: CreateSchedulingDTO) {
     const scheduling = new Scheduling();
 
-    const company = await GetCompany.handle(companyId);
-    const service = await FindService.handle(companyId, data.service_id);
+    const useCaseAccount = new GetAccount(AppDataSource);
+
+    const company = await useCaseAccount.handle(companyId);
+
+    const useCaseService = new FindService(AppDataSource);
+
+    const service = await useCaseService.handle(companyId, data.service_id);
 
     const [hour, minute] = data.start.split(":").map(Number);
 
@@ -41,7 +47,7 @@ export class CreateScheduling {
     }
 
     scheduling.amount = service.price;
-    scheduling.date = new Date(data.date);
+    scheduling.date = new Date(data.date.replaceAll('-', '/'));
     scheduling.start = start;
     scheduling.end = end;
     scheduling.service = service;

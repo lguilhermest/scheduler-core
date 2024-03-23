@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { Column } from "typeorm";
 
-enum AccountStatus {
+export enum AccountStatus {
   'ACTIVE' = 'ACTIVE',
   'BLOCKED' = 'BLOCKED',
   'PENDING' = 'PENDING',

@@ -49,7 +49,6 @@ export class ListSchedulings {
       queryBuilder.andWhere(`scheduling.end ${params.endRule || '='} :end`, { end: formattedTime });
     }
 
-
     return await queryBuilder.getMany();
   }
 }

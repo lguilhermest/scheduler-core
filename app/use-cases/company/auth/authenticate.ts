@@ -1,12 +1,16 @@
 import { HttpException } from "app/exceptions";
-import { AppDataSource } from "app/data-source";
 import { Company } from "app/entity";
+import { DataSource, Repository } from "typeorm";
 import jwt from "jsonwebtoken";
 
 export class Authenticate {
-  private static repository = AppDataSource.getRepository(Company);
+  private repository: Repository<Company>;
 
-  public static async handle(email: string, password: string) {
+  constructor(dataSource: DataSource){
+    this.repository = dataSource.getRepository(Company);
+  }
+
+  public async handle(email: string, password: string) {
     const company = await this.findCompany(email);
 
     if (!company) {
@@ -26,7 +30,7 @@ export class Authenticate {
     };
   }
 
-  private static async findCompany(email: string) {
+  private async findCompany(email: string) {
     return await this.repository.findOne({
       where: { email },
       select: ['id', 'email', 'password']

@@ -1,10 +1,15 @@
 import { AppDataSource } from "app/data-source";
 import { Service } from "app/entity";
+import { DataSource, Repository } from "typeorm";
 
-class ListServices {
-  private static repository = AppDataSource.getRepository(Service);
+export class ListServices {
+  private repository: Repository<Service>;
 
-  static async handle(companyId: number) {
+  constructor(dataSource: DataSource){
+    this.repository = dataSource.getRepository(Service);
+  }
+
+  public async handle(companyId: number) {
     const services = await this.repository.findBy({
       company: {
         id: companyId
@@ -14,5 +19,3 @@ class ListServices {
     return services;
   }
 }
-
-export default ListServices;

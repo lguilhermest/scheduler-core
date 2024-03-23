@@ -1,11 +1,17 @@
+import { HttpException } from "app/exceptions";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import UnprocessableContentException from "./UnprocessableContentException";
 
-class Exception {
+export default class ErrorHandler {
   public static handler(err: Error | any, req: Request, res: Response, next: NextFunction) {
     const { status = 500, ...rest } = err;
     console.log(err);
+
+    if (status === 500) {
+      res.status(status).send({
+        message: 'server error'
+      })
+    }
 
     res.status(status).send(rest);
   }
@@ -15,7 +21,7 @@ class Exception {
       const result = validationResult(req);
 
       if (!result.isEmpty()) {
-        throw new UnprocessableContentException(result);
+        throw new HttpException(422, "validation error",  result.array());
       }
 
       Promise
@@ -26,5 +32,3 @@ class Exception {
     }
   }
 }
-
-export default Exception;

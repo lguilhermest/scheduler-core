@@ -18,7 +18,7 @@ export class CheckAvailability {
   public async handle(companyId: number, params: QueryParams) {
     const queryBuilder = this.repository.createQueryBuilder();
 
-    const { start, end, serviceId } = params;
+    const { date, start, end, serviceId } = params;
 
     const res = await queryBuilder
       .select("scheduling")
@@ -27,6 +27,7 @@ export class CheckAvailability {
       .leftJoinAndSelect('scheduling.service', 'service')
       .where("company.id = :companyId", { companyId })
       .andWhere("service.id = :serviceId", { serviceId })
+      .andWhere("scheduling.date = :date", { date })
       .andWhere(":start < scheduling.end AND :end > scheduling.start", { start, end })
       .getMany();
 

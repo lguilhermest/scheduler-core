@@ -1,13 +1,17 @@
-import { AppDataSource } from "app/data-source";
 import { Company } from "app/entity";
 import { HttpException } from "app/exceptions";
+import { DataSource, Repository } from "typeorm";
 
-class GetAccount {
-  private static repository = AppDataSource.getRepository(Company);
+export class GetAccount {
+  private repository: Repository<Company>;
 
-  static async handle(email: string): Promise<Partial<Company>> {
+  constructor(dataSource: DataSource) {
+    this.repository = dataSource.getRepository(Company);
+  }
+
+  public async handle(id: number): Promise<Company> {
     const company = await this.repository.findOne({
-      where: { email },
+      where: { id },
       relations: [
         'addresses',
         'services'
@@ -21,5 +25,3 @@ class GetAccount {
     return company;
   }
 }
-
-export default GetAccount;

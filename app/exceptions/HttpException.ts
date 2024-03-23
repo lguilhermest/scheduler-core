@@ -1,9 +1,11 @@
 export class HttpException {
-  declare status: number;
-  declare message: any;
+  private status: number;
+  private message: any;
+  private error?: any;
 
-  constructor(status: number, message?: any) {
+  constructor(status: number, message?: string, error?: any) {
     this.message = message || 'http exception';
+    this.error = error;
     this.status = status;
   }
 }

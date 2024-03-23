@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import Company from "./company.entity";
-import Service from "./service.entity";
+import { Company } from "./company.entity";
+import { Service } from "./service.entity";
 
 export enum SchedulingStatus {
   PENDING = 'PENDING',
@@ -18,8 +18,8 @@ export enum SchedulingStatus {
 
 @Entity('schedulings')
 export class Scheduling {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Column()
   amount!: number;

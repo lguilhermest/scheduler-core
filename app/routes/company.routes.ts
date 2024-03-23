@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { AuthMiddleware } from "app/middlewares";
 import {
   AccountController,
   AuthController,
@@ -6,34 +7,35 @@ import {
   SchedulingController,
   ServiceController
 } from "app/controllers/company";
-import { AuthMiddleware } from "app/middlewares";
-import { Exception } from "app/exceptions";
-import AuthSchema from "app/schemas/company/AuthSchema";
-import RegistrationSchema from "app/schemas/company/RegistrationSchema";
-import UpdatePasswordSchema from "app/schemas/company/UpdatePasswordSchema";
-import ServiceSchema from "app/schemas/company/ServiceSchema";
-import schedulingSchema from "app/schemas/company/scheduling.schema";
+import {
+  AuthSchema,
+  RegistrationSchema,
+  CreateSchedulingSchema,
+  ChangePasswordSchema,
+  CreateServiceSchema
+} from "app/schemas/company";
+import ErrorHandler from "app/ErrorHandler";
 
 const router = Router();
 
-router.post('/registration', RegistrationSchema, Exception.asyncHandler(RegistrationController.saveCompany));
-router.post('/login', AuthSchema, Exception.asyncHandler(AuthController.login));
+router.post('/registration', RegistrationSchema, ErrorHandler.asyncHandler(RegistrationController.saveCompany));
+router.post('/login', AuthSchema, ErrorHandler.asyncHandler(AuthController.login));
 
 router.use(AuthMiddleware.user);
-router.get('/', AccountController.account);
-router.post('/update_password', UpdatePasswordSchema, Exception.asyncHandler(AccountController.updatePassword));
+router.get('/', ErrorHandler.asyncHandler(AccountController.account));
+router.post('/update_password', ChangePasswordSchema, ErrorHandler.asyncHandler(AccountController.updatePassword));
 
-router.route('services')
-  .get(Exception.asyncHandler(ServiceController.list))
-  .post(ServiceSchema.create, Exception.asyncHandler(ServiceController.create))
+router.route('/services')
+  .get(ErrorHandler.asyncHandler(ServiceController.list))
+  .post(CreateServiceSchema, ErrorHandler.asyncHandler(ServiceController.create))
 
-router.delete('/services/:id', Exception.asyncHandler(ServiceController.delete));
+router.delete('/services/:id', ErrorHandler.asyncHandler(ServiceController.delete));
 
 router.route('/schedulings')
-  .get(Exception.asyncHandler(SchedulingController.list))
-  .post(schedulingSchema.create, Exception.asyncHandler(SchedulingController.create))
-  .put(Exception.asyncHandler(SchedulingController.update))
+  .get(ErrorHandler.asyncHandler(SchedulingController.list))
+  .post(CreateSchedulingSchema, ErrorHandler.asyncHandler(SchedulingController.create))
+  .put(ErrorHandler.asyncHandler(SchedulingController.update))
 
-router.delete('/schedulings/:id', Exception.asyncHandler(SchedulingController.delete))
+router.delete('/schedulings/:id', ErrorHandler.asyncHandler(SchedulingController.delete))
 
 export default router;

@@ -1,11 +1,16 @@
 import { AppDataSource } from "app/data-source"
 import { Service } from "app/entity"
 import { HttpException } from "app/exceptions";
+import { DataSource, Repository } from "typeorm";
 
-class DeleteService {
-  private static repository = AppDataSource.getRepository(Service);
+export class DeleteService {
+  private repository: Repository<Service>;
 
-  public static async handle(companyId: number, serviceId: number) {
+  constructor(dataSource: DataSource){
+    this.repository = dataSource.getRepository(Service);
+  }
+
+  public async handle(companyId: number, serviceId: number) {
     const service = await this.repository.findOneBy({
       id: serviceId,
       company: {
@@ -25,5 +30,3 @@ class DeleteService {
     }
   }
 }
-
-export default DeleteService;

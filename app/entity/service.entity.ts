@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import Company from "./company.entity";
+import { Company } from "./company.entity";
 import { Scheduling } from "./scheduling.entity";
 
 export enum ServiceStatus {
@@ -17,7 +17,7 @@ export enum ServiceStatus {
 }
 
 @Entity('services')
-class Service {
+export class Service {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -49,5 +49,3 @@ class Service {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 }
-
-export default Service;

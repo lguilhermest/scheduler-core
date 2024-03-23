@@ -7,11 +7,11 @@ import {
   UpdateDateColumn
 } from "typeorm";
 import Authenticable from "./authenticable.entity";
-import Address from "./address.entity";
-import Service from "./service.entity";
+import { Address } from "./address.entity";
+import { Service } from "./service.entity";
 import { Scheduling } from "./scheduling.entity";
 
-@Entity('companies')
+export @Entity('companies')
 class Company extends Authenticable {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -40,5 +40,3 @@ class Company extends Authenticable {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 }
-
-export default Company;

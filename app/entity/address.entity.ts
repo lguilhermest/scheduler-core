@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import Company from "./company.entity";
+import { Company } from "./company.entity";
 
 @Entity('addresses')
-class Address {
+export class Address {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -42,5 +42,3 @@ class Address {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at!: Date;
 }
-
-export default Address;

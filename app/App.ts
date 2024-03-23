@@ -1,7 +1,7 @@
 import express from "express";
 import { AppDataSource } from "./data-source";
 import * as routes from "./routes";
-import { Exception } from "./exceptions";
+import ErrorHandler from "./ErrorHandler";
 
 class App {
   public server: express.Application;
@@ -35,7 +35,7 @@ class App {
   }
 
   private handler() {
-    this.server.use(Exception.handler);
+    this.server.use(ErrorHandler.handler);
   }
 }
 

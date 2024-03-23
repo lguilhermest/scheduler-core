@@ -1,11 +1,15 @@
-import { AppDataSource } from "app/data-source";
 import { Service } from "app/entity";
 import { HttpException } from "app/exceptions";
+import { DataSource, Repository } from "typeorm";
 
-class FindService {
-  private static repository = AppDataSource.getRepository(Service);
+export class FindService {
+  private repository: Repository<Service>;
 
-  static async handle(companyId: number, serviceId: number) {
+  constructor(dataSource: DataSource) {
+    this.repository = dataSource.getRepository(Service)
+  }
+
+  public async handle(companyId: number, serviceId: number) {
     const service = await this.repository.findOneBy({
       id: serviceId,
       company: {
@@ -13,12 +17,10 @@ class FindService {
       }
     });
 
-    if(!service){
+    if (!service) {
       throw new HttpException(404, "serviço não encontrado");
     }
 
     return service;
   }
 }
-
-export default FindService;
