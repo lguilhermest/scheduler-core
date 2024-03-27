@@ -10,6 +10,7 @@ import Authenticable from "./authenticable.entity";
 import { Address } from "./address.entity";
 import { Service } from "./service.entity";
 import { Scheduling } from "./scheduling.entity";
+import { WorkingTime } from "./working-time.entity";
 
 export @Entity('companies')
 class Company extends Authenticable {
@@ -33,6 +34,9 @@ class Company extends Authenticable {
 
   @OneToMany(() => Scheduling, scheduling => scheduling.company)
   schedulings?: Scheduling[];
+
+  @OneToMany(() => WorkingTime, workingTime => workingTime.company)
+  working_time!: WorkingTime[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;

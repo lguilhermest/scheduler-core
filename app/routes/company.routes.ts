@@ -12,7 +12,8 @@ import {
   RegistrationSchema,
   CreateSchedulingSchema,
   ChangePasswordSchema,
-  CreateServiceSchema
+  CreateServiceSchema,
+  SaveWorkingTimeSchema
 } from "app/schemas/company";
 import ErrorHandler from "app/ErrorHandler";
 
@@ -23,7 +24,8 @@ router.post('/login', AuthSchema, ErrorHandler.asyncHandler(AuthController.login
 
 router.use(AuthMiddleware.user);
 router.get('/', ErrorHandler.asyncHandler(AccountController.account));
-router.post('/update_password', ChangePasswordSchema, ErrorHandler.asyncHandler(AccountController.updatePassword));
+router.post('/update_password', ChangePasswordSchema, ErrorHandler.asyncHandler(AccountController.changePassword));
+router.post('/working_hours', SaveWorkingTimeSchema, ErrorHandler.asyncHandler(AccountController.saveWorkingTime));
 
 router.route('/services')
   .get(ErrorHandler.asyncHandler(ServiceController.list))

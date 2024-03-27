@@ -9,13 +9,10 @@ export class GetAccount {
     this.repository = dataSource.getRepository(Company);
   }
 
-  public async handle(id: number): Promise<Company> {
+  public async handle(id: number, relations?: string[]): Promise<Company> {
     const company = await this.repository.findOne({
       where: { id },
-      relations: [
-        'addresses',
-        'services'
-      ]
+      relations
     });
 
     if (!company) {

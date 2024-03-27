@@ -8,14 +8,3 @@ export const AuthSchema = checkSchema({
     isLength: { options: { min: 6 } }
   }
 });
-
-export const ChangePasswordSchema = checkSchema({
-  password: {
-    isLength: { options: { min: 6 } }
-  },
-  new_password: {
-    isLength: { options: { min: 6 } }
-  }
-});
-
-ChangePasswordSchema

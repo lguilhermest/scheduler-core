@@ -10,22 +10,22 @@ import { AppDataSource } from "app/data-source";
 export class CreateScheduling {
   private repository: Repository<Scheduling>;
   private checkAvailability: CheckAvailability;
+  private getCompany: GetAccount;
+  private findService: FindService;
 
   constructor(dataSource: DataSource) {
     this.repository = dataSource.getRepository(Scheduling);
     this.checkAvailability = new CheckAvailability(dataSource);
+    this.getCompany = new GetAccount(dataSource);
+    this.findService = new FindService(dataSource)
   }
 
   public async handle(companyId: number, data: CreateSchedulingDTO) {
     const scheduling = new Scheduling();
 
-    const useCaseAccount = new GetAccount(AppDataSource);
+    const company = await this.getCompany.handle(companyId);
 
-    const company = await useCaseAccount.handle(companyId);
-
-    const useCaseService = new FindService(AppDataSource);
-
-    const service = await useCaseService.handle(companyId, data.service_id);
+    const service = await this.findService.handle(companyId, data.service_id);
 
     const [hour, minute] = data.start.split(":").map(Number);
 
@@ -36,7 +36,7 @@ export class CreateScheduling {
     end.setHours(hour, minute + service.duration_minutes, 0);
 
     const isTimeAvailable = await this.checkAvailability.handle(company.id, {
-      date: data.date,
+      date: new Date(data.date.replaceAll('-', '/')),
       start: this.getTime(start),
       end: this.getTime(end),
       serviceId: data.service_id
