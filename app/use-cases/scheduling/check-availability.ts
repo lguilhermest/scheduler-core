@@ -1,6 +1,5 @@
 import { Scheduling, WorkingTime } from "app/entity";
 import { HttpException } from "app/exceptions";
-import { DataSource, Repository } from "typeorm";
 
 type QueryParams = {
   date: Date;
@@ -10,16 +9,8 @@ type QueryParams = {
 }
 
 export class CheckAvailability {
-  private repository: Repository<Scheduling>;
-  private workingTimeRepository: Repository<WorkingTime>;
-
-  constructor(dataSource: DataSource) {
-    this.repository = dataSource.getRepository(Scheduling);
-    this.workingTimeRepository = dataSource.getRepository(WorkingTime);
-  }
-
-  public async handle(companyId: number, params: QueryParams) {
-    const queryBuilder = this.repository.createQueryBuilder();
+  public static async handle(companyId: number, params: QueryParams) {
+    const queryBuilder = Scheduling.createQueryBuilder();
 
     const { date, start, end, serviceId } = params;
     
@@ -39,8 +30,8 @@ export class CheckAvailability {
     return res.length === 0;
   }
 
-  private async validateWorkingTime(companyId: number, params: QueryParams) {
-    const workingTime = await this.workingTimeRepository.findOneBy({
+  private static async validateWorkingTime(companyId: number, params: QueryParams) {
+    const workingTime = await WorkingTime.findOneBy({
       company: { id: companyId },
       week_day: params.date.getDay()
     });

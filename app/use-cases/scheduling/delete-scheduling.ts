@@ -1,18 +1,14 @@
 import { Scheduling, SchedulingStatus } from "app/entity";
 import { HttpException } from "app/exceptions";
-import { DataSource, Repository } from "typeorm";
 
 export class DeleteScheduling {
-  private repository: Repository<Scheduling>;
-
-  constructor(dataSource: DataSource) {
-    this.repository = dataSource.getRepository(Scheduling);
-  }
-
-  public async handle(companyId: number, id: string) {
-    const scheduling = await this.repository.findOne({
+  public static async handle(companyId: number, id: string) {
+    const scheduling = await Scheduling.findOne({
       where: {
-        id
+        id,
+        company: {
+          id: companyId
+        }
       }
     });
 
@@ -24,6 +20,6 @@ export class DeleteScheduling {
       throw new HttpException(403, 'não é possível excluir esse agendamento');
     }
 
-    await this.repository.remove(scheduling);
+    await scheduling.remove();
   }
 }

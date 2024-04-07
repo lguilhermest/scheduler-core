@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,16 +14,14 @@ import { Service } from "./service.entity";
 export enum SchedulingStatus {
   PENDING = 'PENDING',
   CANCELLED = 'CANCELLED',
-  COMPLETE = 'COMPLETE'
+  EXPIRED = 'EXPIRED',
+  COMPLETED = 'COMPLETED'
 }
 
 @Entity('schedulings')
-export class Scheduling {
+export class Scheduling extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
-
-  @Column()
-  amount!: number;
 
   @Column({ nullable: true })
   notes?: string;

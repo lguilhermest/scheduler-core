@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -17,7 +18,7 @@ export enum ServiceStatus {
 }
 
 @Entity('services')
-export class Service {
+export class Service extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 

@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import { Column } from "typeorm";
+import { BaseEntity, Column } from "typeorm";
 
 export enum AccountStatus {
   'ACTIVE' = 'ACTIVE',
@@ -7,7 +7,7 @@ export enum AccountStatus {
   'PENDING' = 'PENDING',
 }
 
-abstract class Authenticable {
+abstract class Authenticable extends BaseEntity {
   @Column({ select: false })
   password!: string;
 

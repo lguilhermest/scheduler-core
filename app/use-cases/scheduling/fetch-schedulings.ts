@@ -1,6 +1,5 @@
 import { Scheduling } from "app/entity";
 import { format } from "date-fns";
-import { DataSource, Repository } from "typeorm";
 
 export type SchedulingQueryParms = {
   from?: string;
@@ -12,15 +11,9 @@ export type SchedulingQueryParms = {
   endRule?: '=' | '>' | '>=' | '<' | '<=';
   serviceId?: number;
 }
-export class ListSchedulings {
-  private repository: Repository<Scheduling>;
-
-  constructor(dataSource: DataSource) {
-    this.repository = dataSource.getRepository(Scheduling);
-  }
-
-  public async handle(companyId: number, params?: SchedulingQueryParms) {
-    const queryBuilder = this.repository.createQueryBuilder();
+export class FetchSchedulings {
+  public static async handle(companyId: number, params?: SchedulingQueryParms) {
+    const queryBuilder = Scheduling.createQueryBuilder();
 
     queryBuilder
       .select("scheduling")

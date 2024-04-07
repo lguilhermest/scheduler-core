@@ -5,12 +5,13 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  BaseEntity
 } from 'typeorm';
 import { Company } from './company.entity';
 
 @Entity()
-export class WorkingTime {
+export class WorkingTime extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 

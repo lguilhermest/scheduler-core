@@ -1,31 +1,16 @@
 import { Scheduling } from "app/entity";
 import { FindService } from "../services";
-import { CreateSchedulingDTO } from "app/dto";
-import { GetAccount } from "../account";
 import { HttpException } from "app/exceptions";
-import { DataSource, Repository } from "typeorm";
 import { CheckAvailability } from "./check-availability";
-import { AppDataSource } from "app/data-source";
+import { FindCompany } from "../company";
 
 export class CreateScheduling {
-  private repository: Repository<Scheduling>;
-  private checkAvailability: CheckAvailability;
-  private getCompany: GetAccount;
-  private findService: FindService;
-
-  constructor(dataSource: DataSource) {
-    this.repository = dataSource.getRepository(Scheduling);
-    this.checkAvailability = new CheckAvailability(dataSource);
-    this.getCompany = new GetAccount(dataSource);
-    this.findService = new FindService(dataSource)
-  }
-
-  public async handle(companyId: number, data: CreateSchedulingDTO) {
+  public static async handle(companyId: number, data: { date: string; start: string; service_id: number; }) {
     const scheduling = new Scheduling();
 
-    const company = await this.getCompany.handle(companyId);
+    const company = await FindCompany.handle({ id: companyId });
 
-    const service = await this.findService.handle(companyId, data.service_id);
+    const service = await FindService.handle(companyId, data.service_id);
 
     const [hour, minute] = data.start.split(":").map(Number);
 
@@ -35,7 +20,7 @@ export class CreateScheduling {
     const end = new Date()
     end.setHours(hour, minute + service.duration_minutes, 0);
 
-    const isTimeAvailable = await this.checkAvailability.handle(company.id, {
+    const isTimeAvailable = await CheckAvailability.handle(company.id, {
       date: new Date(data.date.replaceAll('-', '/')),
       start: this.getTime(start),
       end: this.getTime(end),
@@ -46,19 +31,18 @@ export class CreateScheduling {
       throw new HttpException(409, 'horário não disponível');
     }
 
-    scheduling.amount = service.price;
     scheduling.date = new Date(data.date.replaceAll('-', '/'));
     scheduling.start = start;
     scheduling.end = end;
     scheduling.service = service;
     scheduling.company = company;
 
-    await this.repository.save(scheduling);
+    await scheduling.save();
 
     return scheduling;
   }
 
-  private getTime(date: Date) {
+  private static getTime(date: Date) {
     return ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
   }
 }
