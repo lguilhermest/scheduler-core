@@ -3,27 +3,23 @@ import { FindService } from "../services";
 import { HttpException } from "app/exceptions";
 import { CheckAvailability } from "./check-availability";
 import { FindCompany } from "../company";
+import { DateTime } from "luxon";
 
 export class CreateScheduling {
   public static async handle(companyId: number, data: { date: string; start: string; service_id: number; }) {
     const scheduling = new Scheduling();
 
     const company = await FindCompany.handle({ id: companyId });
-
     const service = await FindService.handle(companyId, data.service_id);
 
-    const [hour, minute] = data.start.split(":").map(Number);
-
-    const start = new Date();
-    start.setHours(hour, minute, 0);
-
-    const end = new Date()
-    end.setHours(hour, minute + service.duration_minutes, 0);
+    const date = DateTime.fromISO(data.date);
+    const start = DateTime.fromISO(data.date + "T" + data.start);
+    const end = DateTime.fromISO(data.date + "T" + data.start).plus({ minutes: service.duration_minutes });
 
     const isTimeAvailable = await CheckAvailability.handle(company.id, {
-      date: new Date(data.date.replaceAll('-', '/')),
-      start: this.getTime(start),
-      end: this.getTime(end),
+      date: date.toJSDate(),
+      start: start.toLocaleString(DateTime.TIME_24_SIMPLE),
+      end: end.toLocaleString(DateTime.TIME_24_SIMPLE),
       serviceId: data.service_id
     })
 
@@ -32,8 +28,8 @@ export class CreateScheduling {
     }
 
     scheduling.date = new Date(data.date.replaceAll('-', '/'));
-    scheduling.start = start;
-    scheduling.end = end;
+    scheduling.start = start.toJSDate();
+    scheduling.end = end.toJSDate();
     scheduling.service = service;
     scheduling.company = company;
 

@@ -16,10 +16,11 @@ import {
   SaveWorkingTimeSchema
 } from "app/schemas/company";
 import ErrorHandler from "app/ErrorHandler";
+import { AddressSchema } from "app/schemas";
 
 const router = Router();
 
-router.post('/registration', RegistrationSchema, ErrorHandler.asyncHandler(RegistrationController.saveCompany));
+router.post('/registration', RegistrationSchema, AddressSchema, ErrorHandler.asyncHandler(RegistrationController.saveCompany));
 router.post('/login', AuthSchema, ErrorHandler.asyncHandler(AuthController.login));
 
 router.use(AuthMiddleware.user);

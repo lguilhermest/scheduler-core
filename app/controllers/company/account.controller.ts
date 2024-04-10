@@ -7,7 +7,7 @@ import {
 
 export class AccountController {
   static async account(req: Request, res: Response) {
-    const user = await FindCompany.handle(res.locals.user.id, { relations: true });
+    const user = await FindCompany.handle({ id: res.locals.user.id }, { relations: true });
 
     res.send(user);
   }

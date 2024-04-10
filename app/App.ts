@@ -2,6 +2,7 @@ import express from "express";
 import { AppDataSource } from "./data-source";
 import * as routes from "./routes";
 import ErrorHandler from "./ErrorHandler";
+import { CheckSchedulingsJob } from "./jobs";
 
 class App {
   public server: express.Application;
@@ -12,6 +13,7 @@ class App {
     this.middleware();
     this.router();
     this.handler();
+    this.jobs();
   }
 
   private connectDB() {
@@ -36,6 +38,10 @@ class App {
 
   private handler() {
     this.server.use(ErrorHandler.handler);
+  }
+
+  private jobs(){
+    CheckSchedulingsJob.handle();
   }
 }
 
