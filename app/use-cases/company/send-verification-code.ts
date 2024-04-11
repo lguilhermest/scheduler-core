@@ -7,7 +7,7 @@ export class SendVerificationCode {
   public static async handle(company: Company) {
     const code = generateCode();
 
-    cache.set(code, company.email, 5 * 60);
+    cache.set(company.email, code, 5 * 60);
 
     await VericationCodeEmail.handle(company, code);
   }
