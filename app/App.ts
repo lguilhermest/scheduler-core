@@ -1,8 +1,8 @@
 import express from "express";
 import { AppDataSource } from "./data-source";
-import * as routes from "./routes";
-import ErrorHandler from "./ErrorHandler";
 import { CheckSchedulingsJob } from "./jobs";
+import ErrorHandler from "./ErrorHandler";
+import * as routes from "./routes";
 
 class App {
   public server: express.Application;

@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import {
+  ConfirmEmail,
   FindCompany,
   SaveWorkingTime,
+  SendVerificationCode,
   UpdateCompanyPassword,
 } from "app/use-cases";
+import Controller from "../controller";
 
-export class AccountController {
+export class AccountController extends Controller {
   static async account(req: Request, res: Response) {
     const user = await FindCompany.handle({ id: res.locals.user.id }, { relations: true });
 
@@ -29,5 +32,21 @@ export class AccountController {
     );
 
     res.status(201).send(response);
+  }
+
+  static async sendVerificationEmail(req: Request, res: Response) {
+    await SendVerificationCode.handle(await AccountController.company(res));
+
+    res.status(200).send({
+      message: 'enviado'
+    });
+  }
+
+  static async confirmEmail(req: Request, res: Response) {
+    await ConfirmEmail.handle(await AccountController.company(res), req.body.code);
+
+    res.status(200).send({
+      message: 'email confirmado'
+    });
   }
 }

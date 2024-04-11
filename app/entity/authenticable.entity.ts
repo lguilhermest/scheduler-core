@@ -2,9 +2,9 @@ import * as bcrypt from "bcrypt";
 import { BaseEntity, Column } from "typeorm";
 
 export enum AccountStatus {
-  'ACTIVE' = 'ACTIVE',
-  'BLOCKED' = 'BLOCKED',
-  'PENDING' = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  BLOCKED = 'BLOCKED',
+  PENDING = 'PENDING',
 }
 
 abstract class Authenticable extends BaseEntity {
@@ -14,7 +14,7 @@ abstract class Authenticable extends BaseEntity {
   @Column({
     type: 'enum',
     enum: AccountStatus,
-    default: AccountStatus.ACTIVE
+    default: AccountStatus.PENDING
   })
   status!: AccountStatus;
 

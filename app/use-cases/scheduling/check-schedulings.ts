@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { Scheduling, SchedulingStatus } from "app/entity";
-import { SchedulingExpired } from "app/notification/company";
+import { SchedulingExpiredEmail } from "app/notification/company";
 
 export class CheckSchedulings {
   public static async handle() {
@@ -20,7 +20,7 @@ export class CheckSchedulings {
 
     for (const scheduling of schedulings) {
       scheduling.status = SchedulingStatus.EXPIRED;
-      await SchedulingExpired.handle(scheduling.company, scheduling);
+      await SchedulingExpiredEmail.handle(scheduling.company, scheduling);
       await scheduling.save();
     }
   }

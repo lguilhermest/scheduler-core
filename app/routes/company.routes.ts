@@ -17,6 +17,7 @@ import {
 } from "app/schemas/company";
 import ErrorHandler from "app/ErrorHandler";
 import { AddressSchema } from "app/schemas";
+import { body } from "express-validator";
 
 const router = Router();
 
@@ -25,6 +26,8 @@ router.post('/login', AuthSchema, ErrorHandler.asyncHandler(AuthController.login
 
 router.use(AuthMiddleware.user);
 router.get('/', ErrorHandler.asyncHandler(AccountController.account));
+router.post('/send_verification_code', ErrorHandler.asyncHandler(AccountController.sendVerificationEmail));
+router.post('/confirm_email', body('code').isString(), ErrorHandler.asyncHandler(AccountController.confirmEmail));
 router.post('/update_password', ChangePasswordSchema, ErrorHandler.asyncHandler(AccountController.changePassword));
 router.post('/working_hours', SaveWorkingTimeSchema, ErrorHandler.asyncHandler(AccountController.saveWorkingTime));
 
