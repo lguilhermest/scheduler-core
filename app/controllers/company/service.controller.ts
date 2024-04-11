@@ -4,10 +4,11 @@ import {
   DeleteService,
   FetchServices
 } from "app/use-cases";
+import Controller from "../controller";
 
-class ServiceController {
+class ServiceController extends Controller {
   static async create(req: Request, res: Response) {
-    const service = await CreateService.handle(res.locals.user.id, req.body);
+    const service = await CreateService.handle(await ServiceController.company(res), req.body);
 
     res.status(201).send(service);
   }

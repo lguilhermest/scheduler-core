@@ -1,20 +1,22 @@
-import { Scheduling } from "app/entity";
+import { Company, Scheduling } from "app/entity";
 import { FindService } from "../services";
 import { HttpException } from "app/exceptions";
 import { CheckAvailability } from "./check-availability";
-import { FindCompany } from "../company";
 import { DateTime } from "luxon";
 
 export class CreateScheduling {
-  public static async handle(companyId: number, data: { date: string; start: string; service_id: number; }) {
+  public static async handle(company: Company, data: { date: string; start: string; service_id: number; }) {
     const scheduling = new Scheduling();
 
-    const company = await FindCompany.handle({ id: companyId });
-    const service = await FindService.handle(companyId, data.service_id);
+    const service = await FindService.handle(company.id, data.service_id);
 
     const date = DateTime.fromISO(data.date);
     const start = DateTime.fromISO(data.date + "T" + data.start);
     const end = DateTime.fromISO(data.date + "T" + data.start).plus({ minutes: service.duration_minutes });
+
+    if(DateTime.now() > date){
+      throw new HttpException(409, 'horário inválido');
+    }
 
     const isTimeAvailable = await CheckAvailability.handle(company.id, {
       date: date.toJSDate(),

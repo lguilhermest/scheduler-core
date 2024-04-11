@@ -1,9 +1,8 @@
-import { Service, ServiceStatus } from "app/entity";
-import { FindCompany } from "../company";
+import { Company, Service, ServiceStatus } from "app/entity";
 
 export class CreateService {
   public static async handle(
-    companyId: number,
+    company: Company,
     data: {
       name: string;
       description?: string;
@@ -11,8 +10,6 @@ export class CreateService {
       price: number;
       status?: ServiceStatus;
     }): Promise<Service> {
-    const company = await FindCompany.handle({ id: companyId });
-
     const service = Service.create({
       status: ServiceStatus.ACTIVE,
       company,

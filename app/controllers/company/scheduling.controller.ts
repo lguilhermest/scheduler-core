@@ -5,8 +5,9 @@ import {
   DeleteScheduling,
   FetchSchedulings
 } from "app/use-cases";
+import Controller from "../controller";
 
-export class SchedulingController {
+export class SchedulingController extends Controller {
   public static async list(req: Request, res: Response) {
     const data = await FetchSchedulings.handle(res.locals.user.id, req.query);
 
@@ -14,7 +15,7 @@ export class SchedulingController {
   }
 
   public static async create(req: Request, res: Response) {
-    const scheduling = await CreateScheduling.handle(res.locals.user.id, req.body);
+    const scheduling = await CreateScheduling.handle(await SchedulingController.company(res), req.body);
 
     res.status(201).send(scheduling);
   }
