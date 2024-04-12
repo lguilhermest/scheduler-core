@@ -1,5 +1,4 @@
-import { Company } from "app/entity";
-import { AccountStatus } from "app/entity/authenticable.entity";
+import { Company, CompanyStatus } from "app/entity";
 import { HttpException } from "app/exceptions";
 import cache from "app/utils/cache";
 
@@ -15,7 +14,7 @@ export class ConfirmEmail {
       throw new HttpException(401, "código inválido")
     }
 
-    company.status = AccountStatus.ACTIVE;
+    company.status = CompanyStatus.ACTIVE;
     company.save();
   }
 }

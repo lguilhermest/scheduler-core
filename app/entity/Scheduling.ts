@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Company } from "./company.entity";
-import { Service } from "./service.entity";
+import { Company } from "./Company";
+import { Service } from "./Service";
 
 export enum SchedulingStatus {
   /* O agendamento foi criado, mas ainda não foi confirmado pelo cliente ou processado pelo sistema. */

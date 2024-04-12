@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
   BaseEntity
 } from 'typeorm';
-import { Company } from './company.entity';
+import { Company } from './Company';
 
 @Entity()
 export class WorkingTime extends BaseEntity {

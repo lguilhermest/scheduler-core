@@ -9,8 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Company } from "./company.entity";
-import { Scheduling } from "./scheduling.entity";
+import { Company } from "./Company";
+import { Scheduling } from "./Scheduling";
 
 export enum ServiceStatus {
   ACTIVE = 'ACTIVE',
