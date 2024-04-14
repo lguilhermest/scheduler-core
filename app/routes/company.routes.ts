@@ -34,6 +34,7 @@ router.post('/working_hours', SaveWorkingTimeSchema, AccountController.saveWorki
 router.post('/update_password', ChangePasswordSchema, AccountController.changePassword);
 
 router.post('/employees', SaveEmployeeSchema, EmployeeController.save);
+router.get('/employees', EmployeeController.fetch);
 
 router.get('/services', ServiceController.list);
 router.post('/services', CreateServiceSchema, ServiceController.create);
