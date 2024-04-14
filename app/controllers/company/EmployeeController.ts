@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { FetchEmployees, SaveEmployee } from "app/use-cases";
+import { AddService, FetchEmployees, SaveEmployee } from "app/use-cases/employee";
 import Controller from "../controller";
 
 export class EmployeeController extends Controller {
@@ -15,5 +15,13 @@ export class EmployeeController extends Controller {
     const employees = await FetchEmployees.handle({ companyId: company.id });
 
     return res.send(employees);
+  }
+
+  static async addService(req: Request, res: Response) {
+    await AddService.handle(Number(req.params.id), Number(req.params.serviceId));
+
+    return res.send({
+      message: "ok"
+    })
   }
 }

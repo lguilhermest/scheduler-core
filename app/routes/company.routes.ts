@@ -35,6 +35,7 @@ router.post('/update_password', ChangePasswordSchema, AccountController.changePa
 
 router.post('/employees', SaveEmployeeSchema, EmployeeController.save);
 router.get('/employees', EmployeeController.fetch);
+router.post('/employees/:id/services/:serviceId', EmployeeController.addService);
 
 router.get('/services', ServiceController.list);
 router.post('/services', CreateServiceSchema, ServiceController.create);

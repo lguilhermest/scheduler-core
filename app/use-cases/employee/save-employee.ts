@@ -1,5 +1,5 @@
-import { Company, Employee, Service } from "app/entity";
-import { HttpException } from "app/exceptions";
+import { Company, Employee } from "app/entity";
+import { AddService } from "./add-service";
 
 interface Props {
   name: string;
@@ -15,28 +15,16 @@ export class SaveEmployee {
     employee.phone = data.phone;
     employee.company = company;
 
+    await employee.save();
+
     if (data.services) {
-      const list: Service[] = [];
-
-      for (const id of data.services) {
-        const service = await Service.findOneBy({
-          id,
-          company: {
-            id: company.id
-          }
-        });
-
-        if (service) {
-          list.push(service);
-          continue;
+      try {
+        for (const id of data.services) {
+          await AddService.handle(employee, id)
         }
-
-        throw new HttpException(404, `serviço (${id}) não encontrado`);
-      }
-
-      employee.services = list
+      } catch (error) { }
     }
 
-    return await employee.save();
+    return employee;
   }
 }

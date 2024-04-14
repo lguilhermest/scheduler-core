@@ -8,10 +8,15 @@ interface QueryAttributes {
 
 export class FetchEmployees {
   public static async handle(params: QueryAttributes) {
-    const employees = await Employee.findBy({
-      id: params.id,
-      company: { id: params.companyId },
-      services: [{ id: params.serviceId }]
+    const employees = await Employee.find({
+      where: {
+        id: params.id,
+        company: { id: params.companyId },
+        services: [{ id: params.serviceId }]
+      },
+      relations: {
+        services: true
+      }
     });
 
     return employees;
