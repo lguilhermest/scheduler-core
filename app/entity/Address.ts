@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { Company } from "./company.entity";
+import { Company } from "./Company";
 
 @Entity('addresses')
 export class Address extends BaseEntity {

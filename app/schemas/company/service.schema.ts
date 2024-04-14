@@ -10,5 +10,9 @@ export const CreateServiceSchema = checkSchema({
   },
   duration_minutes: {
     isInt: true
+  },
+  employees: {
+    optional: true,
+    isArray: true
   }
 })

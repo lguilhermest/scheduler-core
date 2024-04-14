@@ -1,8 +1,8 @@
-import { Router } from "express";
 import { AuthMiddleware } from "app/middlewares";
 import {
   AccountController,
   AuthController,
+  EmployeeController,
   RegistrationController,
   SchedulingController,
   ServiceController
@@ -13,35 +13,37 @@ import {
   CreateSchedulingSchema,
   ChangePasswordSchema,
   CreateServiceSchema,
-  SaveWorkingTimeSchema
+  SaveWorkingTimeSchema,
+  SaveEmployeeSchema
 } from "app/schemas/company";
-import ErrorHandler from "app/ErrorHandler";
 import { AddressSchema } from "app/schemas";
 import { body } from "express-validator";
+import Router from "./router";
 
-const router = Router();
+const router = new Router();
 
-router.post('/registration', RegistrationSchema, AddressSchema, ErrorHandler.asyncHandler(RegistrationController.saveCompany));
-router.post('/login', AuthSchema, ErrorHandler.asyncHandler(AuthController.login));
+router.post('/registration', RegistrationSchema, AddressSchema, RegistrationController.saveCompany);
+router.post('/login', AuthSchema, AuthController.login);
 
 router.use(AuthMiddleware.user);
-router.get('/', ErrorHandler.asyncHandler(AccountController.account));
-router.post('/send_verification_code', ErrorHandler.asyncHandler(AccountController.sendVerificationEmail));
-router.post('/confirm_email', body('code').isString(), ErrorHandler.asyncHandler(AccountController.confirmEmail));
-router.post('/update_password', ChangePasswordSchema, ErrorHandler.asyncHandler(AccountController.changePassword));
-router.post('/working_hours', SaveWorkingTimeSchema, ErrorHandler.asyncHandler(AccountController.saveWorkingTime));
+router.get('/', AccountController.account);
+router.post('/send_verification_code', AccountController.sendVerificationEmail);
+router.post('/confirm_email', body('code').isString(), AccountController.confirmEmail);
 
-router.route('/services')
-  .get(ErrorHandler.asyncHandler(ServiceController.list))
-  .post(CreateServiceSchema, ErrorHandler.asyncHandler(ServiceController.create))
+router.post('/working_hours', SaveWorkingTimeSchema, AccountController.saveWorkingTime);
+router.post('/update_password', ChangePasswordSchema, AccountController.changePassword);
 
-router.delete('/services/:id', ErrorHandler.asyncHandler(ServiceController.delete));
+router.post('/employees', SaveEmployeeSchema, EmployeeController.save);
+router.get('/employees', EmployeeController.fetch);
+router.post('/employees/:id/services/:serviceId', EmployeeController.addService);
 
-router.route('/schedulings')
-  .get(ErrorHandler.asyncHandler(SchedulingController.list))
-  .post(CreateSchedulingSchema, ErrorHandler.asyncHandler(SchedulingController.create))
-  .put(ErrorHandler.asyncHandler(SchedulingController.update))
+router.get('/services', ServiceController.list);
+router.post('/services', CreateServiceSchema, ServiceController.create);
+router.delete('/services/:id', ServiceController.delete);
 
-router.delete('/schedulings/:id', ErrorHandler.asyncHandler(SchedulingController.delete))
+router.get('/schedulings', SchedulingController.list);
+router.post('/schedulings', CreateSchedulingSchema, SchedulingController.create);
+router.put('/schedulings', SchedulingController.update);
+router.delete('/schedulings/:id', SchedulingController.delete);
 
-export default router;
+export default router.getRouter();

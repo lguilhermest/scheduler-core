@@ -6,7 +6,7 @@ import {
 } from "app/use-cases";
 import Controller from "../controller";
 
-class ServiceController extends Controller {
+export class ServiceController extends Controller {
   static async create(req: Request, res: Response) {
     const service = await CreateService.handle(await ServiceController.company(res), req.body);
 
@@ -25,5 +25,3 @@ class ServiceController extends Controller {
     res.status(200).send(response);
   }
 }
-
-export default ServiceController;

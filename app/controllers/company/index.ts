@@ -1,5 +1,6 @@
-export * from "./account.controller";
-export * from "./auth.controller";
-export * from "./registration.controller";
-export * from "./scheduling.controller";
-export { default as ServiceController } from "./service.controller";
+export * from "./AccountController";
+export * from "./AuthController";
+export * from "./EmployeeController";
+export * from "./RegistrationController";
+export * from "./SchedulingController";
+export * from "./ServiceController";
