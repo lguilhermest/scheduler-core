@@ -1,10 +1,16 @@
 import { checkSchema } from "express-validator";
 
 export const SaveEmployeeSchema = checkSchema({
-  password: {
-    isLength: { options: { min: 6 } }
+  name: {
+    isString: true
   },
-  new_password: {
-    isLength: { options: { min: 6 } }
+  phone: {
+    isMobilePhone: {
+      options: 'pt-BR'
+    }
+  },
+  services: {
+    optional: true,
+    isArray: true
   }
 });

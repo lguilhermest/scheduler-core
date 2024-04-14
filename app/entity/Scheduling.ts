@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Company } from "./Company";
 import { Service } from "./Service";
+import { Employee } from "./Employee";
 
 export enum SchedulingStatus {
   /* O agendamento foi criado, mas ainda não foi confirmado pelo cliente ou processado pelo sistema. */
@@ -57,6 +58,10 @@ export class Scheduling extends BaseEntity {
   @ManyToOne(() => Company, company => company.schedulings)
   @JoinColumn({ name: "company_id" })
   company!: Company;
+
+  @ManyToOne(() => Employee, employee => employee.schedulings, { nullable: true })
+  @JoinColumn({ name: "employee_id" })
+  employee!: Employee;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
