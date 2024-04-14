@@ -2,6 +2,7 @@ import { AuthMiddleware } from "app/middlewares";
 import {
   AccountController,
   AuthController,
+  EmployeeController,
   RegistrationController,
   SchedulingController,
   ServiceController
@@ -12,7 +13,8 @@ import {
   CreateSchedulingSchema,
   ChangePasswordSchema,
   CreateServiceSchema,
-  SaveWorkingTimeSchema
+  SaveWorkingTimeSchema,
+  SaveEmployeeSchema
 } from "app/schemas/company";
 import { AddressSchema } from "app/schemas";
 import { body } from "express-validator";
@@ -30,6 +32,8 @@ router.post('/confirm_email', body('code').isString(), AccountController.confirm
 
 router.post('/working_hours', SaveWorkingTimeSchema, AccountController.saveWorkingTime);
 router.post('/update_password', ChangePasswordSchema, AccountController.changePassword);
+
+router.post('/employees', SaveEmployeeSchema, EmployeeController.save);
 
 router.get('/services', ServiceController.list);
 router.post('/services', CreateServiceSchema, ServiceController.create);
