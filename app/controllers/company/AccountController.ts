@@ -10,7 +10,7 @@ import Controller from "../controller";
 
 export class AccountController extends Controller {
   static async account(req: Request, res: Response) {
-    const user = await FindCompany.handle({ id: res.locals.user.id }, { relations: true });
+    const user = await FindCompany.handle({ id: AccountController.company(req).id }, { relations: true });
 
     res.send(user);
   }
@@ -35,7 +35,7 @@ export class AccountController extends Controller {
   }
 
   static async sendVerificationEmail(req: Request, res: Response) {
-    await SendVerificationCode.handle(await AccountController.company(res));
+    await SendVerificationCode.handle(AccountController.company(req));
 
     res.status(200).send({
       message: 'enviado'
@@ -43,7 +43,7 @@ export class AccountController extends Controller {
   }
 
   static async confirmEmail(req: Request, res: Response) {
-    await ConfirmEmail.handle(await AccountController.company(res), req.body.code);
+    await ConfirmEmail.handle(AccountController.company(req), req.body.code);
 
     res.status(200).send({
       message: 'email confirmado'

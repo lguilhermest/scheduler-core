@@ -15,7 +15,7 @@ export class SchedulingController extends Controller {
   }
 
   public static async create(req: Request, res: Response) {
-    const scheduling = await CreateScheduling.handle(await SchedulingController.company(res), req.body);
+    const scheduling = await CreateScheduling.handle(SchedulingController.company(req), req.body);
 
     res.status(201).send(scheduling);
   }

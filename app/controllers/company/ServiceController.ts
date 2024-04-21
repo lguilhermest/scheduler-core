@@ -8,7 +8,7 @@ import Controller from "../controller";
 
 export class ServiceController extends Controller {
   static async create(req: Request, res: Response) {
-    const service = await CreateService.handle(await ServiceController.company(res), req.body);
+    const service = await CreateService.handle(ServiceController.company(req), req.body);
 
     res.status(201).send(service);
   }

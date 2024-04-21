@@ -24,6 +24,7 @@ const router = new Router();
 
 router.post('/registration', RegistrationSchema, AddressSchema, RegistrationController.saveCompany);
 router.post('/login', AuthSchema, AuthController.login);
+router.post('/logout', AuthController.logout);
 
 router.use(AuthMiddleware.user);
 router.get('/', AccountController.account);

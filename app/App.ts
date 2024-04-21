@@ -3,6 +3,7 @@ import { AppDataSource } from "./data-source";
 import { CheckSchedulingsJob } from "./jobs";
 import ErrorHandler from "./ErrorHandler";
 import * as routes from "./routes";
+import session from "express-session";
 
 class App {
   public server: express.Application;
@@ -27,7 +28,19 @@ class App {
       });
   }
 
+
   private middleware() {
+    this.server.use(session({
+      secret: process.env.SESSION_SECRET as string,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: this.server.get('env') === 'production',
+        maxAge: (1000 * 60 * 60) // 1h
+      }
+    }))
+
+
     this.server.use(express.json());
   }
 
@@ -40,7 +53,7 @@ class App {
     this.server.use(ErrorHandler.handler);
   }
 
-  private jobs(){
+  private jobs() {
     CheckSchedulingsJob.handle();
   }
 }

@@ -4,13 +4,13 @@ import Controller from "../controller";
 
 export class EmployeeController extends Controller {
   static async save(req: Request, res: Response) {
-    const employee = await SaveEmployee.handle(await EmployeeController.company(res), req.body);
+    const employee = await SaveEmployee.handle(EmployeeController.company(req), req.body);
 
     res.status(201).send(employee);
   }
 
   static async fetch(req: Request, res: Response) {
-    const company = await EmployeeController.company(res)
+    const company = EmployeeController.company(req)
 
     const employees = await FetchEmployees.handle({ companyId: company.id });
 

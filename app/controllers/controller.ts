@@ -1,8 +1,9 @@
-import { FindCompany } from "app/use-cases";
-import { Response } from "express";
+import { Company } from "app/entity";
+import { Request } from "express";
 
 export default class Controller {
-  protected static async company(res: Response){
-    return await FindCompany.handle({ id: res.locals.user.id });
+  protected static company(req: Request): Company {
+    return req.session.company as Company;
+    // return await FindCompany.handle({ id: res.locals.user.id });
   }
 }
