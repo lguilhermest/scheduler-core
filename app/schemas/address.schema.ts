@@ -1,29 +1,31 @@
 import { checkSchema } from "express-validator";
 
 export const AddressSchema = checkSchema({
+  'address.zip_code': {
+    isLength: {
+      options: {
+        min: 8,
+        max: 8
+      },
+    }
+  },
   'address.street': {
-    isString: true,
-    errorMessage: 'Street must be a string',
+    isString: true
   },
   'address.number': {
-    isString: true,
-    errorMessage: 'Number must be a string',
+    isString: true
   },
   'address.complement': {
     optional: true,
-    isString: true,
-    errorMessage: 'Complement must be a string',
+    isString: true
   },
   'address.neighborhood': {
-    isString: true,
-    errorMessage: 'Neighborhood must be a string',
+    isString: true
   },
   'address.city': {
-    isString: true,
-    errorMessage: 'City must be a string',
+    isString: true
   },
   'address.state': {
-    isString: true,
-    errorMessage: 'State must be a string',
+    isString: true
   },
 })

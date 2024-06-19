@@ -15,8 +15,6 @@ export class SaveCompany {
 
     await companyAddress.save();
 
-    delete companyAddress.company;
-
     return await Company.findOne({
       where: {
         id: company.id
